@@ -18,7 +18,7 @@ function useLocalStorage(
     window.localStorage.setItem(key, serialize(state));
   }, [state, key]); //DEPENDENCY
 
-  return [state, setState];
+  return [state, setState, serialize];
 }
 
 const MemoGreeting = memo(function Greeting({ initial = "" }) {
