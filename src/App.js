@@ -11,7 +11,7 @@ function useLocalStorage(
     if (valueFromLocal) {
       return deSerialize(valueFromLocal);
     }
-    return defaultValue;
+    return  typeof defaultValue === 'function' ? defaultValue() : '';
   }); // async
 
   useEffect(() => {
@@ -21,8 +21,9 @@ function useLocalStorage(
   return [state, setState, serialize];
 }
 
-const MemoGreeting = memo(function Greeting({ initial = "" }) {
-  const [name, setName] = useLocalStorage("name", initial);
+const MemoGreeting = memo(function Greeting() {
+  // const [name, setName] = useLocalStorage("name", initial);  defaualtvalue is text
+  const [name, setName] = useLocalStorage("name", ()=>"hello"); // defaualtvalue is function
 
   return (
     <div className="App">
@@ -40,7 +41,7 @@ function App() {
   const [count, setCount] = useState(0);
   return (
     <div>
-      <MemoGreeting initial="sdfs" />
+      <MemoGreeting />
       <button onClick={() => setCount(count + 1)}>{count}</button>
     </div>
   );
