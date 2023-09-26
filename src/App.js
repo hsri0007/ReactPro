@@ -2,13 +2,24 @@ import './App.css';
 import { useEffect, useState, memo } from 'react';
 
 
-const MemoGreeting = memo(function Greeting({initial = ''}){
-  const [name, setName] = useState(()=>window.localStorage.getItem('name') || initial); // async
-  // const [name, setName] = useState(window.localStorage.getItem('name') || initial); sync
+
+
+function useLocalStorage (key, defaultValue=''){
+  const [state, setState] = useState(()=>window.localStorage.getItem(key) || defaultValue); // async
+
 
   useEffect(()=>{
-    window.localStorage.setItem('name', name)
-  },[name])//DEPENDENCY
+    window.localStorage.setItem(key, state)
+  },[state, key])//DEPENDENCY
+
+
+  return [state, setState];
+
+}
+
+
+const MemoGreeting = memo(function Greeting({initial = ''}){
+  const [name, setName] = useLocalStorage('name', initial);
 
   return (
     <div className="App">
